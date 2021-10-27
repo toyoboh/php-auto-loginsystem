@@ -3,6 +3,7 @@
 include __DIR__ . "/../../vendor/autoload.php";
 
 use SToyokura\Classes\Auth;
+use SToyokura\Classes\User;
 
 //postの時に確認
 if($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -12,6 +13,12 @@ if($_SERVER["REQUEST_METHOD"] !== "POST") {
     $user_info = "sho";
     $password = "password";
 
+    //認証
     $login_result = Auth::login($user_info, $password);
+
+    //認証成功したらユーザ情報を設定
+    if($login_result["auth"]) {
+        User::setUser($login_result);
+    }
 
 }
