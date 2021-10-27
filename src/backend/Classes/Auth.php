@@ -1,7 +1,7 @@
 <?php
 namespace SToyokura\Classes;
 
-use SToyokura\Classes\DBConnect;
+use SToyokura\Classes\UsePdo;
 
 class Auth
 {
@@ -16,18 +16,16 @@ class Auth
 
         //ユーザ情報取得のクエリ文作成
         $sql = "SELECT user_id, user_name, password FROM t_users WHERE user_id = :user_id OR mail_address = :mail_address;";
-    
-        //インスタンス生成
-        $db = new DBConnect();
-        $pdo = $db->pdo;
-    
-        //クエリ文の実行
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(":user_id", $user_info);
-        $stmt->bindValue(":mail_address", $user_info);
-        $stmt->execute();
-        $user = $stmt->fetch();
-        $count = $stmt->rowCount();
+        //SQLインジェクション対策で使用する配列（bindValueで使用する）
+        $pdo_item_arr = [
+            "user_id" => $user_info,
+            "mail_address" => $user_info
+        ];
+
+        //認証処理
+        $use_pdo = new UsePdo($sql, $pdo_item_arr);
+        $count = $use_pdo->stmtRowCount();
+        $user  = $use_pdo->stmtFetch();
     
         //認証結果を返す配列を設定
         if($count == 1 && password_verify($password, $user["password"])) {

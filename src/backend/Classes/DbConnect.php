@@ -7,12 +7,12 @@ namespace SToyokura\Classes;
  */
 class DBConnect
 {
-    public $pdo = null;
+    private $pdo = null;
 
-    public $dsn = "";
-    public $username = "";
-    public $password = "";
-    public $options = [
+    private $dsn = "";
+    private $username = "";
+    private $password = "";
+    private $options = [
         \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
         \PDO::ATTR_EMULATE_PREPARES => false
@@ -57,5 +57,11 @@ class DBConnect
             var_dump($e->getMessage());
         }
     }
-    
+
+    /**
+     * 
+     */
+    public function getPdo() {
+        return $this->pdo;
+    }
 }
