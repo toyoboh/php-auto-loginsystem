@@ -5,20 +5,26 @@ include __DIR__ . "/../../vendor/autoload.php";
 use SToyokura\Classes\Auth;
 use SToyokura\Classes\User;
 
-//postの時に確認
-if($_SERVER["REQUEST_METHOD"] !== "POST") {
-    //受け取る
-    // $user_info = $_POST["user_info"];
-    // $password  = $_POST["password"];
-    $user_info = "sho";
-    $password = "password";
+//POST以外の時は終了
+if($_SERVER["REQUEST_METHOD"] === "POST") {
+    return;
+}
 
-    //認証
-    $login_result = Auth::login($user_info, $password);
+//受け取る
+// $user_info = $_POST["user_info"];
+// $password  = $_POST["password"];
+$user_info = "sho";
+$password = "password";
 
-    //認証成功したらユーザ情報を設定
-    if($login_result["auth"]) {
-        User::setUser($login_result);
-    }
+//認証
+$auth = new Auth();
+$login_result = $auth->login($user_info, $password);
 
+//認証成功したらユーザ情報を設定
+if($login_result["auth"]) {
+    $user = new User($login_result);
+}
+
+if($user->isLogind()) {
+    echo "ログイン済みです";
 }

@@ -3,21 +3,28 @@ namespace SToyokura\Classes;
 
 class User
 {
-    public static $user_id = "";
-    public static $user_name = "";
-    public static $auth      = false;
+    private $user_id = "";
+    private $user_name = "";
+    private $auth      = false;
 
     /**
-     * ユーザ情報を設定するメソッド
-     * @param array $user Auth::login時に返される連想配列
+     * メンバ変数設定
+     * @param array $user_arr Auth::login時に返される連想配列
      * @return void
      */
-    public static function setUser($user) {
-        self::$user_id = $user["user_id"];
-        self::$user_name = $user["user_name"];
-        self::$auth = $user["auth"];
+    public function __construct($user_arr) {
+        $this->user_id   = $user_arr["user_id"];
+        $this->user_name = $user_arr["user_name"];
+        $this->auth      = $user_arr["auth"];
     }
 
-    
+    /**
+     * ユーザがログイン成功しているか返すメソッド
+     * @param void
+     * @return bool 認証成功しているか
+     */
+    public function isLogind() {
+        return $this->auth;
+    }
 
 }

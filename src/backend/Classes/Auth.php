@@ -12,7 +12,7 @@ class Auth
      * @param string $password  パスワード
      * @return array $login_result 認証の結果
      */
-    public static function login($user_info, $password) {
+    public function login($user_info, $password) {
 
         //ユーザ情報取得のクエリ文作成
         $sql = "SELECT user_id, user_name, password FROM t_users WHERE user_id = :user_id OR mail_address = :mail_address;";

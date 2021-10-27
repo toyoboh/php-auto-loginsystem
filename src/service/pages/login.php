@@ -3,13 +3,6 @@
 
 include __DIR__ . "/../../backend/loginProcess.php";
 
-use SToyokura\Classes\User;
-
-if(User::$auth) {
-    echo User::$user_id;
-    echo User::$user_name;
-    echo User::$auth;
-}
 
 ?>
 
