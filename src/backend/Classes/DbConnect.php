@@ -5,7 +5,7 @@ namespace SToyokura\Classes;
  * DBに接続するクラス
  * インスタンスを生成し、pdoプロパティを用いることでDBの操作が可能
  */
-class DbConnect
+class DBConnect
 {
     public $pdo = null;
 
