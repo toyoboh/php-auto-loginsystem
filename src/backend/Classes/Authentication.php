@@ -2,15 +2,16 @@
 namespace SToyokura\Classes;
 
 use SToyokura\Classes\UsePdo;
+use SToyokura\Classes\User;
 
-class Auth
+class Authentication
 {
 
     /**
      * 認証メソッド
-     * @param string $user_info ユーザIDもしくはメールアドレス
-     * @param string $password  パスワード
-     * @return array $login_result 認証の結果
+     * @param string  $user_info ユーザIDもしくはメールアドレス
+     * @param string  $password  パスワード
+     * @return object $user      Userインスタンス
      */
     public function login($user_info, $password) {
 
@@ -22,13 +23,13 @@ class Auth
             "mail_address" => $user_info
         ];
 
-        //認証処理
-        $use_pdo = new UsePdo($sql, $pdo_item_arr);
-        $count = $use_pdo->stmtRowCount();
-        $user  = $use_pdo->stmtFetch();
+        //DB情報取得
+        $obj_use_pdo = new UsePdo($sql, $pdo_item_arr);
+        $count = $obj_use_pdo->stmtRowCount();
+        $user  = $obj_use_pdo->stmtFetch();
     
-        //認証結果を返す配列を設定
-        if($count == 1 && password_verify($password, $user["password"])) {
+        //Userクラスに渡す配列を定義
+        if($count != 0 && password_verify($password, $user["password"])) {
             $login_result = [
                 "auth" => true,
                 "user_id" => $user["user_id"],
@@ -39,8 +40,12 @@ class Auth
                 "auth" => false
             ];
         }
+        
+        //Userインスタンス生成
+        $user = new User($login_result);
 
-        return $login_result;
+        //ログイン結果としてUserインスタンスを返す
+        return $user;
     }
 
     public function logout() {

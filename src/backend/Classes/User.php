@@ -3,7 +3,7 @@ namespace SToyokura\Classes;
 
 class User
 {
-    private $user_id = "";
+    private $user_id   = "";
     private $user_name = "";
     private $auth      = false;
 
@@ -13,15 +13,17 @@ class User
      * @return void
      */
     public function __construct($user_arr) {
+        //認証成功している時だけ
+        if(!$user_arr["auth"]) return;
         $this->user_id   = $user_arr["user_id"];
         $this->user_name = $user_arr["user_name"];
         $this->auth      = $user_arr["auth"];
     }
 
     /**
-     * ユーザがログイン成功しているか返すメソッド
+     * ユーザがログイン済みか返すメソッド
      * @param void
-     * @return bool 認証成功しているか
+     * @return bool ログイン済みの時はtrue
      */
     public function isLogind() {
         return $this->auth;
