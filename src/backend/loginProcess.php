@@ -18,9 +18,9 @@ if($_SERVER["REQUEST_METHOD"] !== "POST") {
     $obj_user = $obj_auth->login($user_info, $password);
 
     if($obj_user->isLogind()) {
-        echo "ログイン成功";
+        echo "成功";
     } else {
-        echo "ログイン失敗";
+        echo "失敗";
     }
 
 }
