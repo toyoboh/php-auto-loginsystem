@@ -16,16 +16,17 @@ class Authentication
     public function login($user_info, $password) {
 
         //条件に該当するユーザ数、ユーザ情報を取得
-        list($user_count, $user_data) = $this->selectUserData($user_info, $password);
+        list($user_count, $user_data) = $this->selectUserData($user_info);
     
-        //Userインスタンスに渡す配列を取得
-        $login_result_arr = $this->getLoginResultArr($user_count, $user_data);
+        //Userクラスに渡す配列を定義
+        if($user_count != 0 && password_verify($password, $user_data["password"])) {
+            $login_result_arr = $this->loginSuccessArr($user_data);
+        } else {
+            $login_result_arr = $this->loginFailArr($user_data);
+        }
         
-        //Userインスタンス生成
-        $user = new User($login_result_arr);
-
-        //ログイン結果としてUserインスタンスを返す
-        return $user;
+        //Userインスタンスを生成し、返す
+        return new User($login_result_arr);
     }
 
     public function logout() {
@@ -35,11 +36,10 @@ class Authentication
     /**
      * 条件に該当するユーザの数とユーザ情報の取得
      * @param string  $user_info ユーザIDもしくはメールアドレス
-     * @param string  $password  パスワード
      * @return int    $user_count 条件に該当したユーザの数
      * @return array  $user_data  ユーザの情報
      */
-    public function selectUserData($user_info, $password) {
+    public function selectUserData($user_info) {
         //ユーザ情報取得のクエリ文作成
         $sql = "SELECT user_id, user_name, password FROM t_users WHERE user_id = :user_id OR mail_address = :mail_address;";
         //SQLインジェクション対策で使用する配列（bindValueで使用する）
@@ -54,20 +54,6 @@ class Authentication
         $user_data  = $obj_use_pdo->stmtFetch();
 
         return array($user_count, $user_data);
-    }
-
-    /**
-     * ユーザのパスワード情報の確認。また、結果を元に配列を返すメソッド
-     * @param
-     */
-    public function getLoginResultArr($user_count, $user_data) {
-        //Userクラスに渡す配列を定義
-        if($user_count != 0 && password_verify($password, $user_data["password"])) {
-            $login_result_arr = $this->loginSuccessArr($user_data);
-        } else {
-            $login_result_arr = $this->loginSuccessArr($user_data);
-        }
-        return $login_result_arr;
     }
 
     /**
