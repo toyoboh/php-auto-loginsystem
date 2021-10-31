@@ -1,5 +1,7 @@
 <?php
 
+namespace SToyokura\Classes;
+
 class Session
 {
     /**
