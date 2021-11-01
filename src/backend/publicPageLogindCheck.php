@@ -27,8 +27,6 @@ if(isset($_COOKIE["cookie_token"])) {
     $row_count = $obj_use_pdo->stmtRowCount();
     $row = $obj_use_pdo->stmtFetch();
 
-    $obj_cookie = new Cookie();
-    
     if($row_count == 1) {
         //token生成
         $token = Token::getToken();
@@ -42,17 +40,19 @@ if(isset($_COOKIE["cookie_token"])) {
         new UsePdo($insert_sql, $insert_arr);
 
         //cookieセット
-        $obj_cookie->set("cookie_token", $token, time()+60*60*24*14);
+        Cookie::set("cookie_token", $token, time()+60*60*24*14);
 
         //古いトークンはDBから削除
-        $obj_cookie->deleteForDb($row["id"]);
+        Cookie::deleteForDb($row["id"]);
 
+        //session_idの値を変える
+        session_regenerate_id(true);
         //sessionにuser_idをセット
         $_SESSION["user_id"] = $row["user_id"];
         header("Location: home.php");
         exit();
     } else {
-        $obj_cookie->delete("cookie_token");
-        $obj_cookie->deleteForDb($row["id"]);
+        Cookie::delete("cookie_token");
+        Cookie::deleteForDb($row["id"]);
     }
 }
