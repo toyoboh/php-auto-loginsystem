@@ -2,6 +2,7 @@
 
 use SToyokura\Classes\UsePdo;
 use SToyokura\Classes\Token;
+use SToyokura\Classes\Cookie;
 
 //sessionの有無確認
 if(!isset($_SESSION)) session_start();
@@ -25,6 +26,9 @@ if(isset($_COOKIE["cookie_token"])) {
     $obj_use_pdo = new UsePdo($sql, $arr);
     $row_count = $obj_use_pdo->stmtRowCount();
     $row = $obj_use_pdo->stmtFetch();
+
+    $obj_cookie = new Cookie();
+    
     if($row_count == 1) {
         //token生成
         $token = Token::getToken();
@@ -38,24 +42,17 @@ if(isset($_COOKIE["cookie_token"])) {
         new UsePdo($insert_sql, $insert_arr);
 
         //cookieセット
-        setcookie("cookie_token", $token, time()+60*60*24*14, "/", null, false, true);
+        $obj_cookie->set("cookie_token", $token, time()+60*60*24*14);
 
         //古いトークンはDBから削除
-        $delete_sql = "DELETE FROM t_auto_login WHERE id = :id;";
-        $delete_arr = [ "id" => $row["id"]];
-        new UsePdo($delete_sql, $delete_arr);
+        $obj_cookie->deleteForDb($row["id"]);
 
         //sessionにuser_idをセット
         $_SESSION["user_id"] = $row["user_id"];
         header("Location: home.php");
         exit();
     } else {
-        //古いcookieは削除
-        setcookie("cookie_token", "", time()-60);
-
-        //古いトークンはDBから削除
-        $delete_sql = "DELETE FROM t_auto_login WHERE id = :id;";
-        $delete_arr = [ "id" => $row["id"]];
-        new UsePdo($delete_sql, $delete_arr);
+        $obj_cookie->delete("cookie_token");
+        $obj_cookie->deleteForDb($row["id"]);
     }
 }
