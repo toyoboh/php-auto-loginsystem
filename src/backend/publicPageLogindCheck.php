@@ -3,14 +3,15 @@
 use SToyokura\Classes\UsePdo;
 use SToyokura\Classes\Token;
 use SToyokura\Classes\Cookie;
+use SToyokura\Classes\Redirect;
 
 //sessionの有無確認
 if(!isset($_SESSION)) session_start();
 
 //sessionにuser_idが登録されていたらホーム画面へ
 if(isset($_SESSION["user_id"])) {
-    header("Location: home.php");
-    exit();
+    $obj_redirect = new Redirect();
+    $obj_redirect->go("home");
 }
 
 //cookieトークンがあったら
@@ -49,8 +50,9 @@ if(isset($_COOKIE["cookie_token"])) {
         session_regenerate_id(true);
         //sessionにuser_idをセット
         $_SESSION["user_id"] = $row["user_id"];
-        header("Location: home.php");
-        exit();
+        
+        $obj_redirect = new Redirect();
+        $obj_redirect->go("home");
     } else {
         Cookie::delete("cookie_token");
         Cookie::deleteForDb($row["id"]);
