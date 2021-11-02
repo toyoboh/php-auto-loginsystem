@@ -16,6 +16,7 @@ class Redirect
         $document_root_path  = $_SERVER["DOCUMENT_ROOT"];
         foreach($files_absolute_path as $path) {
             $page_name                 = pathinfo($path, PATHINFO_FILENAME);
+            //header関数で使用する時にドキュメントルートパスは不要なので絶対パスから削除する
             $for_header_location_path  = str_replace($document_root_path, "", $path);
             $page_list_arr[$page_name] = $for_header_location_path;
         }
