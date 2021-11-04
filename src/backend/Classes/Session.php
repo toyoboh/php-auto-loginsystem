@@ -72,4 +72,11 @@ class Session
         return isset($_SESSION[$key]);
     }
 
+    /**
+     * 全てのセッション情報を取得
+     */
+    public function getAll() {
+        return $_SESSION;
+    }
+
 }

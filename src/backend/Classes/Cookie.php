@@ -11,14 +11,15 @@ class Cookie
      * @param string $old_cookie_token 現時点で登録されているcookie_token
      * @param string $expiration_datetime cookie_tokenの有効日時
      * @return boolean 
+     * @return array DBより取得したユーザ情報
      */
     public function checkExpirationDate($old_cookie_token, $expiration_datetime) {
-        $use_pdo_arr = [
-            "cookie_token"    => $cookie_token,
+        $select_item_arr = [
+            "cookie_token"    => $old_cookie_token,
             "expiration_datetime" => $expiration_datetime
         ];
-        $sql = "SELECT * FROM t_auto_login WHERE cookie_token = :cookie_token AND created_at >= :expiration_datetime;";
-        $obj_use_pdo = new UsePdo($sql, $use_pdo_arr);
+        $select_sql = "SELECT * FROM t_auto_login WHERE cookie_token = :cookie_token AND created_at >= :expiration_datetime;";
+        $obj_use_pdo = new UsePdo($select_sql, $select_item_arr);
         $row_count = $obj_use_pdo->stmtRowCount();
         $row       = $obj_use_pdo->stmtFetch();
         return array($row_count == 1, $row);
@@ -43,7 +44,7 @@ class Cookie
             "cookie_token" => $cookie_token
         ];
         $insert_sql = "INSERT INTO t_auto_login(user_id, cookie_token) VALUES(:user_id, :cookie_token);";
-        new UsePdo($insert_sql, $insert_arr);
+        new UsePdo($insert_sql, $insert_item_arr);
     }
      
     /**
