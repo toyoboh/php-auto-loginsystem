@@ -3,7 +3,6 @@
 include __DIR__ . "/../../vendor/autoload.php";
 
 use SToyokura\Classes\Authentication;
-use SToyokura\Classes\Session;
 
 //GETの時に実行
 if($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -16,6 +15,6 @@ if($_SERVER["REQUEST_METHOD"] !== "POST") {
     
     //認証
     $obj_auth = new Authentication();
-    $obj_user = $obj_auth->login($user_info, $password);
+    $obj_auth->login($user_info, $password);
 
 }
