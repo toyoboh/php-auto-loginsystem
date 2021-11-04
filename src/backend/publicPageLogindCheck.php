@@ -7,11 +7,8 @@ use SToyokura\Classes\Session;
 $obj_session = new Session();
 
 if($obj_session->isThere("user_id")) {
-    echo "user_id: {$obj_session->get('user_id')}";
-    // $obj_redirect = new Redirect();
-    // $obj_redirect->go("home");
-} else {
-    echo "user_idはありません";
+    $obj_redirect = new Redirect();
+    $obj_redirect->go("home");
 }
 
 if(isset($_COOKIE["cookie_token"])) {

@@ -62,6 +62,6 @@ class Cookie
     public function deleteForDb($id) {
         $delete_sql = "DELETE FROM t_auto_login WHERE id = :id";
         $delete_item_arr = ["id" => $id];
-        $obj_use_pdo = new UsePdo($sql, $delete_item_arr);
+        $obj_use_pdo = new UsePdo($delete_sql, $delete_item_arr);
     }
 }

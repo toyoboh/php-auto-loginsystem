@@ -33,7 +33,7 @@ class Authentication
             $new_cookie_token = Token::getToken();
             
             $obj_cookie->registerForDb($cookie_token_record_db["user_id"], $new_cookie_token);
-            $obj_cookie->register("cookie_token", $token, time()+60*60*24*14);
+            $obj_cookie->register("cookie_token", $new_cookie_token, time()+60*60*24*14);
             $obj_cookie->deleteForDb($cookie_token_record_db["id"]);
     
             $obj_session = new Session();
