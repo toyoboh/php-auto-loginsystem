@@ -7,8 +7,10 @@ use SToyokura\Classes\UsePdo;
 class Cookie
 {
     /**
+     * PCに保存されているcookieトークンの有効期限を確認する
      * @param string $old_cookie_token 現時点で登録されているcookie_token
      * @param string $expiration_datetime cookie_tokenの有効日時
+     * @return boolean 
      */
     public function checkExpirationDate($old_cookie_token, $expiration_datetime) {
         $use_pdo_arr = [
@@ -22,8 +24,6 @@ class Cookie
         return array($row_count == 1, $row);
     }
 
-    
-
     /**
      * cookieの登録（更新）※４つ目以降の引数を調整することが多くなってきたら廃止するかも
      * @param string $key cookieのキー
@@ -35,7 +35,7 @@ class Cookie
     }
 
     /**
-     * 
+     * cookie情報をDBに登録
      */
     public function registerForDb($user_id, $cookie_token) {
         $insert_item_arr = [

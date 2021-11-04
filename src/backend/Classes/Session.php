@@ -17,6 +17,15 @@ class Session
     }
 
     /**
+     * セッションIDの更新
+     * @param void
+     * @return void
+     */
+    public function regenerate() {
+        session_regenerate_id(true);
+    }
+
+    /**
      * セッション変数に追加
      * @param string $key $_SESSIONのキー
      * @param mixed  $value $_SESSIONの値
